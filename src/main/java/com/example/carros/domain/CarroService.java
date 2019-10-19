@@ -21,18 +21,18 @@ public class CarroService {
 		
 		//".map(CarroDTO::new)": Sintaxe resumida da expressão lambda
 		//.map(c -> new CarroDTO(c))
-		return rep.findAll().stream().map(CarroDTO::new).collect(Collectors.toList());
+		return rep.findAll().stream().map(CarroDTO::create).collect(Collectors.toList());
 	}	
 
-	public Optional<Carro> getCarroById(Long id) {
+	public Optional<CarroDTO> getCarroById(Long id) {
 		
-		return rep.findById(id);
+		return rep.findById(id).map(CarroDTO::create);
 		
 	}
 
 	public List<CarroDTO> getCarroByTipo(String tipo) {		
 		
-		return rep.findByTipo(tipo).stream().map(CarroDTO::new).collect(Collectors.toList());		
+		return rep.findByTipo(tipo).stream().map(CarroDTO::create).collect(Collectors.toList());		
 		
 	}
 	
@@ -55,7 +55,8 @@ public class CarroService {
 		
 		//Assert.notNull(id, message: "Não foi possível atualizar o registro.");
 		
-		Optional<Carro> optional = getCarroById(id);
+		Optional<Carro> optional = rep.findById(id);		
+		
 		if (optional.isPresent()) {
 			Carro db = optional.get();
 			db.setNome(carro.getNome());
@@ -72,7 +73,7 @@ public class CarroService {
 
 	public void delete(Long id) {
 		
-		Optional<Carro> carro = getCarroById(id);
+		Optional<CarroDTO> carro = getCarroById(id);
 		
 		if(carro.isPresent()) {
 			rep.deleteById(id);
