@@ -3,10 +3,12 @@ package com.example.carros.domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+
+import com.example.carros.domain.dto.CarroDTO;
 
 @Service
 public class CarroService {
@@ -15,9 +17,11 @@ public class CarroService {
 	@Autowired
 	private CarroRepository rep;
 	
-	public Iterable<Carro> getCarros(){		
-			
-		return rep.findAll();
+	public List<CarroDTO> getCarros(){		
+		
+		//".map(CarroDTO::new)": Sintaxe resumida da expressão lambda
+		//.map(c -> new CarroDTO(c))
+		return rep.findAll().stream().map(CarroDTO::new).collect(Collectors.toList());
 	}	
 
 	public Optional<Carro> getCarroById(Long id) {
@@ -26,17 +30,18 @@ public class CarroService {
 		
 	}
 
-	public Iterable<Carro> getCarroByTipo(String tipo) {
+	public List<CarroDTO> getCarroByTipo(String tipo) {		
 		
-		return rep.findByTipo(tipo);
+		return rep.findByTipo(tipo).stream().map(CarroDTO::new).collect(Collectors.toList());		
+		
 	}
 	
 	public List<Carro> getCarrosFake(){
 		
 		List<Carro> carros = new ArrayList<>();		
-		carros.add(new Carro( 1L, "Fusca"));
-		carros.add(new Carro( 2L, "Brasilia"));
-		carros.add(new Carro( 3L, "Chevette"));		
+		//carros.add(new Carro( 1L, "Fusca"));
+		//carros.add(new Carro( 2L, "Brasilia"));
+		//carros.add(new Carro( 3L, "Chevette"));		
 		return carros;
 	}
 

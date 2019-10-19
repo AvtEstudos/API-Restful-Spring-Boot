@@ -1,12 +1,12 @@
 package com.example.carros.domain;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 //Classe que irá fazer a conexão com o banco de dados
-//P1: Classe da entidade
-//P2: Tipo da variavel chave da tabela
-public interface CarroRepository extends CrudRepository<Carro, Long>{
+public interface CarroRepository extends JpaRepository<Carro, Long>{
 
-	Iterable<Carro> findByTipo(String tipo);
+	List<Carro> findByTipo(String tipo);
 
 }
