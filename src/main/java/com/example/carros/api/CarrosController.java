@@ -1,7 +1,10 @@
 package com.example.carros.api;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.Servlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
 import com.example.carros.domain.dto.CarroDTO;
@@ -67,28 +72,45 @@ public class CarrosController {
 	//@RequestBody: Converte o JSon no objeto carro, basta 
 	//              o objeto JSon ter os atributos de carro
 	@PostMapping
-	public String post(@RequestBody Carro carro){
+	public ResponseEntity post(@RequestBody Carro carro){
 		
-		Carro c = service.insert(carro);
-		return "Carro salvo com sucesso " + c.getId();	
+		try {
+			CarroDTO c = service.insert(carro);
+			
+			URI location = getUri(c.getId());
+			
+			return ResponseEntity.created(location).build();
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}	
+	}
 	
+	private URI getUri(Long id) {
+		return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(id).toUri();
 	}
 	
 	@PutMapping("/{id}")
-	public String put(@PathVariable("id") Long id, @RequestBody Carro carro) {
+	public ResponseEntity put(@PathVariable("id") Long id, @RequestBody Carro carro) {
 	
-		Carro c = service.update(carro, id);
+		carro.setId(id);
 		
-		return "Carro atualizado com sucesso: " + c.getId(); 
+		CarroDTO c = service.update(carro, id);
+		
+		return c != null ?
+				ResponseEntity.ok(c) :
+				ResponseEntity.notFound().build(); 
 		
 	}
 	
 	@DeleteMapping("/{id}")
-	public String delete(@PathVariable("id") Long id) {
+	public ResponseEntity delete(@PathVariable("id") Long id) {
 		
-		service.delete(id);
+		boolean ok = service.delete(id);
 		
-		return "Carro deletado com sucesso";
+		return ok ?
+				ResponseEntity.ok().build() :
+				ResponseEntity.notFound().build();		
 		
 	}
 	

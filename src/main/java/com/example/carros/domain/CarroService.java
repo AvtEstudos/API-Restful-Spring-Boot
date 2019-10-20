@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.example.carros.domain.dto.CarroDTO;
 
@@ -45,16 +46,14 @@ public class CarroService {
 		return carros;
 	}
 
-	public Carro insert(Carro carro) {
+	public CarroDTO insert(Carro carro) {
 		
-		return rep.save(carro);		
+		return CarroDTO.create(rep.save(carro));		
 		
 	}
 	
-	public Carro update(Carro carro, Long id) {
-		
-		//Assert.notNull(id, message: "Não foi possível atualizar o registro.");
-		
+	public CarroDTO update(Carro carro, Long id) {
+						
 		Optional<Carro> optional = rep.findById(id);		
 		
 		if (optional.isPresent()) {
@@ -64,21 +63,23 @@ public class CarroService {
 			
 			rep.save(db);
 			
-			return db;
+			return CarroDTO.create(db);
 			
 		} else {
-			throw new RuntimeException("Não foi possivel atualizar o registro.");
+			return null;
 		}		
 	}
 
-	public void delete(Long id) {
+	public boolean delete(Long id) {
 		
 		Optional<CarroDTO> carro = getCarroById(id);
 		
 		if(carro.isPresent()) {
 			rep.deleteById(id);
+			return true;
 		}
 		
+		return false;		
 	}
 	
 }
