@@ -57,6 +57,13 @@
 			<scope>provided</scope>
 		</dependency>
 		
+		<!-- H2 - banco de dados para tete -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>			
+			<scope>test</scope>
+		</dependency>
+		
 		<dependency>
 		  <groupId>org.modelmapper</groupId>
 		  <artifactId>modelmapper</artifactId>
