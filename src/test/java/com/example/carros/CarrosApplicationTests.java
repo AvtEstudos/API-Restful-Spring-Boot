@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.Console;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +27,7 @@ public class CarrosApplicationTests {
 	@Autowired
 	private CarroService service;
 
-	@Test
+	@Test	
 	public void tstInserir() {
 		
 		//Inseri carro através do serviço
@@ -63,10 +65,24 @@ public class CarrosApplicationTests {
 	@Test
 	public void tstListar() {
 		
-		List<CarroDTO> carros = service.getCarros();
+		List<CarroDTO> carros = service.getCarros();	
+		
+		for (CarroDTO c : carros) {
+			System.out.println(c.getNome());
+		}
 		
 		assertEquals(30, carros.size());
 		
+	}
+	
+	@Test
+	public void tstListarTipo() {
+		
+		assertEquals(10, service.getCarroByTipo("classicos").size());
+		assertEquals(10, service.getCarroByTipo("esportivos").size());
+		assertEquals(10, service.getCarroByTipo("luxo").size());
+		
+		assertEquals(0, service.getCarroByTipo("x").size());
 	}
 
 }

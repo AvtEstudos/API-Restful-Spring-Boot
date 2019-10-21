@@ -12,6 +12,12 @@ public class Carro {
 	private Long id;	
 	
 	private String nome;	
-	private String tipo;		
+	private String tipo;
+	private String descricao;
+	private String url_Foto;
+	private String url_Video;
+	private String latitude;
+	private String longitude;
+	
 
 }
