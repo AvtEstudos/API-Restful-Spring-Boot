@@ -22,6 +22,8 @@ import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
 import com.example.carros.domain.dto.CarroDTO;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 @RestController
 @RequestMapping("/api/v1/carros")
 public class CarrosController {
@@ -35,28 +37,12 @@ public class CarrosController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<CarroDTO> get(@PathVariable("id") Long id) {
+	public ResponseEntity<CarroDTO> get(@PathVariable("id") Long id) throws ObjectNotFoundException {
 		
-		Optional<CarroDTO> carro = service.getCarroById(id);		
+		CarroDTO carro = service.getCarroById(id);		
 		
-		return carro.map(c -> ResponseEntity.ok(c))
-				.orElse(ResponseEntity.notFound().build());		
-		
-		/*
-		return carro.isPresent() ?
-				ResponseEntity.ok(carro.get()) :
-				ResponseEntity.notFound().build();
-		*/		
-		
-		/*
-		if(carro.isPresent()) {
-			//Como temos o objeto sendo passado o build é realizado automaticamente
-			return ResponseEntity.ok(carro.get());
-		}
-		else {
-			return ResponseEntity.notFound().build();
-		}
-		*/		
+		return ResponseEntity.ok(carro);		
+				
 	}
 	
 	@GetMapping("/tipo/{tipo}")
@@ -100,11 +86,9 @@ public class CarrosController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable("id") Long id) {
 		
-		boolean ok = service.delete(id);
+		service.delete(id);		
 		
-		return ok ?
-				ResponseEntity.ok().build() :
-				ResponseEntity.notFound().build();		
+		return ResponseEntity.ok().build();		
 		
 	}
 	

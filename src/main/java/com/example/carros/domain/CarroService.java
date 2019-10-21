@@ -11,6 +11,8 @@ import org.springframework.util.Assert;
 
 import com.example.carros.domain.dto.CarroDTO;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 @Service
 public class CarroService {
 	
@@ -25,10 +27,12 @@ public class CarroService {
 		return rep.findAll().stream().map(CarroDTO::create).collect(Collectors.toList());
 	}	
 
-	public Optional<CarroDTO> getCarroById(Long id) {
+	public CarroDTO getCarroById(Long id) throws ObjectNotFoundException
+	{
 		
-		return rep.findById(id).map(CarroDTO::create);
+		Optional<Carro> carro = rep.findById(id);		
 		
+        return carro.map(CarroDTO::create).orElseThrow(() -> new ObjectNotFoundException("Carro não encontrado"));
 	}
 
 	public List<CarroDTO> getCarroByTipo(String tipo) {		
@@ -71,16 +75,10 @@ public class CarroService {
 		}		
 	}
 
-	public boolean delete(Long id) {
+	public void delete(Long id) {		
 		
-		Optional<CarroDTO> carro = getCarroById(id);
-		
-		if(carro.isPresent()) {
-			rep.deleteById(id);
-			return true;
-		}
-		
-		return false;		
+		rep.deleteById(id);
+				
 	}
 	
 }

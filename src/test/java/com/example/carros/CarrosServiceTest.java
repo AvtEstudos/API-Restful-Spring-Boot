@@ -3,7 +3,9 @@ package com.example.carros;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.Console;
 import java.util.Iterator;
@@ -19,6 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
 import com.example.carros.domain.dto.CarroDTO;
+
+import javassist.tools.rmi.ObjectNotFoundException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -44,14 +48,16 @@ public class CarrosServiceTest {
 		Long id = c.getId();
 		assertNotNull(id);
 		
-		//Recupera o carro 
-		Optional<CarroDTO> op = service.getCarroById(id);
+		//Recupera o carro 		
+		try {
+			c = service.getCarroById(id);
+		} catch (ObjectNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		assertNotNull(c);		
 		
-		//Verifica se carro recuperado existe
-		assertTrue(op.isPresent());
-		
-		//Verifica se carro recuperado é igual ao inserido
-		c = op.get();
+		//Verifica se carro recuperado é igual ao inserido		
 		assertEquals("Fiesta", c.getNome());
 		assertEquals("popular", c.getTipo());
 		
@@ -59,7 +65,12 @@ public class CarrosServiceTest {
 		service.delete(id);
 		
 		//Verificar se deletou
-		assertFalse(service.getCarroById(id).isPresent());		
+		try {
+			service.getCarroById(id);
+	        fail("O carro não foi excluído");
+	    } catch (ObjectNotFoundException e) {
+	    	// OK
+	    }		
 	}
 	
 	@Test
@@ -84,5 +95,14 @@ public class CarrosServiceTest {
 		
 		assertEquals(0, service.getCarroByTipo("x").size());
 	}
-
+	
+	@Test
+	public void testGet() throws ObjectNotFoundException {
+	
+		CarroDTO c = service.getCarroById(11L);
+		
+		assertNotNull(c);
+		
+		assertEquals("Ferrari FF", c.getNome());
+	}
 }
