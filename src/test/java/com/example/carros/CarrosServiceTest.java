@@ -22,7 +22,7 @@ import com.example.carros.domain.dto.CarroDTO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CarrosApplicationTests {
+public class CarrosServiceTest {
 	
 	@Autowired
 	private CarroService service;
