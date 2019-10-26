@@ -6,23 +6,20 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
 import java.io.Console;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.example.carros.api.exception.ObjectNotFoundException;
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
 import com.example.carros.domain.dto.CarroDTO;
-
-import javassist.tools.rmi.ObjectNotFoundException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -48,13 +45,9 @@ public class CarrosServiceTest {
 		Long id = c.getId();
 		assertNotNull(id);
 		
-		//Recupera o carro 		
-		try {
-			c = service.getCarroById(id);
-		} catch (ObjectNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		//Recupera o carro		
+		c = service.getCarroById(id);
+		
 		assertNotNull(c);		
 		
 		//Verifica se carro recuperado é igual ao inserido		

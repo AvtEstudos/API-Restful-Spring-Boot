@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import com.example.carros.api.exception.ObjectNotFoundException;
 import com.example.carros.domain.dto.CarroDTO;
-
-import javassist.tools.rmi.ObjectNotFoundException;
 
 @Service
 public class CarroService {
@@ -27,7 +25,7 @@ public class CarroService {
 		return rep.findAll().stream().map(CarroDTO::create).collect(Collectors.toList());
 	}	
 
-	public CarroDTO getCarroById(Long id) throws ObjectNotFoundException
+	public CarroDTO getCarroById(Long id) 
 	{
 		
 		Optional<Carro> carro = rep.findById(id);		
