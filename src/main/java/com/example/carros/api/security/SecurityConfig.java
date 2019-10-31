@@ -15,13 +15,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		//.anyRequest().authenticated(): Define que todo request deverá ser autenticado.		
-		//.formLogin().and(): Com a retirada dessa linha não teremos a tela de login
+		//.anyRequest().authenticated(): Define que todo request 
+		//                               deverá ser autenticado.		
+		//.formLogin().and(): Com a retirada dessa linha não 
+		//                    teremos a tela de login
 		http
 			.authorizeRequests()
 				.anyRequest().authenticated()
 				.and()			
 			.httpBasic();
 	}
-
 }
