@@ -1,12 +1,14 @@
 package com.example.carros.api.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 //Como é uma classe de configuração ativamos a anotação @Configuration 
@@ -18,6 +20,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 //Extendendo a classe de configuração do spring
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	//Definindo a classe 
+	@Qualifier("userDatailsService")
+	private UserDetailsService UserDetailsService; 
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -41,14 +48,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		BCryptPasswordEncoder enconder = new BCryptPasswordEncoder();
 		
-		// 	Quando definimos inMemoryAuthentication, precisamos definir 
-		// um password enconde
+		auth.userDetailsService(UserDetailsService).passwordEncoder(enconder);		
+		
+		/*
 		auth	 	
 	 	.inMemoryAuthentication().passwordEncoder(enconder)
 	 		.withUser("user").password(enconder.encode("user")).roles("USER")
 	 		.and()
 	 		.withUser("admin").password(enconder.encode("admin")).roles("USER", "ADMIN");
-
+	 	*/
 	}
 	
 }
