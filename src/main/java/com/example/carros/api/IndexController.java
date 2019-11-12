@@ -13,7 +13,8 @@ public class IndexController {
 	@GetMapping	
 	public String get() {
 		return "Api dos Carros - Heroku Git";
-	}			
+	}		
+	
 	
 	//Definindo o Mapeamento
 	@GetMapping("/userInfo")
